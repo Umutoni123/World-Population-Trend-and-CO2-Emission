@@ -1,12 +1,11 @@
 ---
-title: "Project I: World Population Trend and CO2 Emission"
+title: "World Population Trend and CO2 Emission"
 author: "Noella Umutoni"
-date: "2026-11-06"
 format:
   html:
     toc: true
-    code-fold: false
     embed-resources: true
+output-file: index.html
 execute:
   warning: false
   message: false
