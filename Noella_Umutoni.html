@@ -3330,127 +3330,109 @@ vertical-align: -.125em;
 <h1>Create a projected 2030 population variable</h1>
 <p>I estimated the 2030 population using the 2022 population and growth rate. I assumed the growth rate stays the same for eight years.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(pop_clean<span class="sc">$</span>Growth.Rate <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>pop_clean<span class="sc">$</span>Projected_2030 <span class="ot">&lt;-</span> <span class="fu">round</span>(pop_clean<span class="sc">$</span>X2022.Population <span class="sc">*</span> <span class="fu">exp</span>(<span class="dv">8</span><span class="sc">*</span><span class="fu">log</span>(pop_clean<span class="sc">$</span>Growth.Rate)))</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>projection <span class="ot">&lt;-</span> pop_clean[<span class="fu">order</span>(<span class="sc">-</span>pop_clean<span class="sc">$</span>Projected_2030), <span class="fu">c</span>(<span class="st">&quot;Country.Territory&quot;</span>,<span class="st">&quot;X2022.Population&quot;</span>,<span class="st">&quot;Growth.Rate&quot;</span>,<span class="st">&quot;Projected_2030&quot;</span>)]</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(projection, <span class="dv">15</span>), <span class="at">caption=</span><span class="st">&quot;Top 15 projected populations for 2030&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Population in 2022</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> pop_clean<span class="sc">$</span>X2022.Population</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Annual growth rate</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">log</span>(pop_clean<span class="sc">$</span>Growth.Rate)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of years from 2022 to 2030</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict population in 2030 using N = P * exp(r * t)</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>pop_clean<span class="sc">$</span>Population_2030 <span class="ot">&lt;-</span> <span class="fu">round</span>(P <span class="sc">*</span> <span class="fu">exp</span>(r <span class="sc">*</span> t))</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the predicted population</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the first 15 countries</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(pop_clean[, <span class="fu">c</span>(<span class="st">&quot;Country.Territory&quot;</span>,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;X2022.Population&quot;</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;Population_2030&quot;</span>)], <span class="dv">15</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Top 15 projected populations for 2030</caption>
 <thead>
 <tr class="header">
-<th style="text-align: left;"></th>
 <th style="text-align: left;">Country.Territory</th>
 <th style="text-align: right;">X2022.Population</th>
-<th style="text-align: right;">Growth.Rate</th>
-<th style="text-align: right;">Projected_2030</th>
+<th style="text-align: right;">Population_2030</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">93</td>
-<td style="text-align: left;">India</td>
-<td style="text-align: right;">1417173173</td>
-<td style="text-align: right;">1.0068</td>
-<td style="text-align: right;">1496127403</td>
+<td style="text-align: left;">Afghanistan</td>
+<td style="text-align: right;">41128771</td>
+<td style="text-align: right;">50385848</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">42</td>
-<td style="text-align: left;">China</td>
-<td style="text-align: right;">1425887337</td>
-<td style="text-align: right;">1.0000</td>
-<td style="text-align: right;">1425887337</td>
+<td style="text-align: left;">Albania</td>
+<td style="text-align: right;">2842321</td>
+<td style="text-align: right;">2746004</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">222</td>
-<td style="text-align: left;">United States</td>
-<td style="text-align: right;">338289857</td>
-<td style="text-align: right;">1.0038</td>
-<td style="text-align: right;">348711690</td>
+<td style="text-align: left;">Algeria</td>
+<td style="text-align: right;">44903225</td>
+<td style="text-align: right;">51144011</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">94</td>
-<td style="text-align: left;">Indonesia</td>
-<td style="text-align: right;">275501339</td>
-<td style="text-align: right;">1.0064</td>
-<td style="text-align: right;">289927051</td>
+<td style="text-align: left;">American Samoa</td>
+<td style="text-align: right;">44273</td>
+<td style="text-align: right;">38630</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">157</td>
-<td style="text-align: left;">Pakistan</td>
-<td style="text-align: right;">235824862</td>
-<td style="text-align: right;">1.0191</td>
-<td style="text-align: right;">274362026</td>
+<td style="text-align: left;">Andorra</td>
+<td style="text-align: right;">79824</td>
+<td style="text-align: right;">86438</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">150</td>
-<td style="text-align: left;">Nigeria</td>
-<td style="text-align: right;">218541212</td>
-<td style="text-align: right;">1.0241</td>
-<td style="text-align: right;">264406591</td>
+<td style="text-align: left;">Angola</td>
+<td style="text-align: right;">35588987</td>
+<td style="text-align: right;">45610989</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">28</td>
-<td style="text-align: left;">Brazil</td>
-<td style="text-align: right;">215313498</td>
-<td style="text-align: right;">1.0046</td>
-<td style="text-align: right;">223365784</td>
+<td style="text-align: left;">Anguilla</td>
+<td style="text-align: right;">15857</td>
+<td style="text-align: right;">16714</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">Bangladesh</td>
-<td style="text-align: right;">171186372</td>
-<td style="text-align: right;">1.0108</td>
-<td style="text-align: right;">186548196</td>
+<td style="text-align: left;">Antigua and Barbuda</td>
+<td style="text-align: right;">93763</td>
+<td style="text-align: right;">98203</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">64</td>
-<td style="text-align: left;">Ethiopia</td>
-<td style="text-align: right;">123379924</td>
-<td style="text-align: right;">1.0257</td>
-<td style="text-align: right;">151149718</td>
+<td style="text-align: left;">Argentina</td>
+<td style="text-align: right;">45510318</td>
+<td style="text-align: right;">47438365</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">172</td>
-<td style="text-align: left;">Russia</td>
-<td style="text-align: right;">144713314</td>
-<td style="text-align: right;">0.9973</td>
-<td style="text-align: right;">141616886</td>
+<td style="text-align: left;">Armenia</td>
+<td style="text-align: right;">2780469</td>
+<td style="text-align: right;">2697058</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">132</td>
-<td style="text-align: left;">Mexico</td>
-<td style="text-align: right;">127504125</td>
-<td style="text-align: right;">1.0063</td>
-<td style="text-align: right;">134073830</td>
+<td style="text-align: left;">Aruba</td>
+<td style="text-align: right;">106445</td>
+<td style="text-align: right;">105681</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">164</td>
-<td style="text-align: left;">Philippines</td>
-<td style="text-align: right;">115559009</td>
-<td style="text-align: right;">1.0147</td>
-<td style="text-align: right;">129868879</td>
+<td style="text-align: left;">Australia</td>
+<td style="text-align: right;">26177413</td>
+<td style="text-align: right;">28323942</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">56</td>
-<td style="text-align: left;">DR Congo</td>
-<td style="text-align: right;">99010212</td>
-<td style="text-align: right;">1.0325</td>
-<td style="text-align: right;">127879366</td>
+<td style="text-align: left;">Austria</td>
+<td style="text-align: right;">8939617</td>
+<td style="text-align: right;">9083656</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">58</td>
-<td style="text-align: left;">Egypt</td>
-<td style="text-align: right;">110990103</td>
-<td style="text-align: right;">1.0158</td>
-<td style="text-align: right;">125820070</td>
+<td style="text-align: left;">Azerbaijan</td>
+<td style="text-align: right;">10358074</td>
+<td style="text-align: right;">10728343</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">103</td>
-<td style="text-align: left;">Japan</td>
-<td style="text-align: right;">123951692</td>
-<td style="text-align: right;">0.9947</td>
-<td style="text-align: right;">118792604</td>
+<td style="text-align: left;">Bahamas</td>
+<td style="text-align: right;">409984</td>
+<td style="text-align: right;">427013</td>
 </tr>
 </tbody>
 </table>

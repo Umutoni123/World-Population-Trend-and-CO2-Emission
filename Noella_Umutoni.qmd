@@ -119,10 +119,25 @@ summary(co2_clean$X2019)
 I estimated the 2030 population using the 2022 population and growth rate. I assumed the growth rate stays the same for eight years.
 
 ```{r}
-stopifnot(all(pop_clean$Growth.Rate > 0))
-pop_clean$Projected_2030 <- round(pop_clean$X2022.Population * exp(8*log(pop_clean$Growth.Rate)))
-projection <- pop_clean[order(-pop_clean$Projected_2030), c("Country.Territory","X2022.Population","Growth.Rate","Projected_2030")]
-knitr::kable(head(projection, 15), caption="Top 15 projected populations for 2030")
+# Population in 2022
+P <- pop_clean$X2022.Population
+
+# Annual growth rate
+r <- log(pop_clean$Growth.Rate)
+
+# Number of years from 2022 to 2030
+t <- 8
+
+# Predict population in 2030 using N = P * exp(r * t)
+pop_clean$Population_2030 <- round(P * exp(r * t))
+
+# Show the predicted population
+# Show the first 15 countries
+knitr::kable(
+  head(pop_clean[, c("Country.Territory",
+                     "X2022.Population",
+                     "Population_2030")], 15)
+)
 ```
 
 # Population and CO2 trends
